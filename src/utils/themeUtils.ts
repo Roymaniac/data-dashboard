@@ -1,5 +1,5 @@
-import type { Theme, ResolvedTheme } from '../types/theme';
-import { COLOR_SCHEME_QUERY, THEME_VALUES } from '../types/theme';
+import type { Theme, ResolvedTheme } from '@/types/theme';
+import { COLOR_SCHEME_QUERY, THEME_VALUES } from '@/types/theme';
 
 export function isTheme(value: string | null | undefined): value is Theme {
   if (!value) return false;

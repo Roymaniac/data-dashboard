@@ -1,14 +1,14 @@
 import * as React from 'react';
-import type { Theme, ThemeProviderProps, ThemeProviderContext as ThemeProviderContextType } from '../types/theme';
-import { COLOR_SCHEME_QUERY } from '../types/theme';
+import type { Theme, ThemeProviderProps, ThemeProviderContext as ThemeProviderContextType } from '@/types/theme';
+import { COLOR_SCHEME_QUERY } from '@/types/theme';
 import {
     applyThemeToDocument,
     getNextTheme,
     isEditableTarget,
     isTheme,
     resolveTheme,
-} from '../utils/themeUtils';
-import { ThemeProviderContext as ThemeContext } from '../hooks/useTheme';
+} from '@/utils/themeUtils';
+import { ThemeProviderContext as ThemeContext } from '@/hooks/useTheme';
 
 export function ThemeProvider({
     children,
