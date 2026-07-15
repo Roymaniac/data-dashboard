@@ -1,75 +1,83 @@
-# React + TypeScript + Vite
+# Data Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Data Dashboard is a modern, interactive analytics web app built with React, TypeScript, and Vite. It brings together live data from multiple public APIs into a single dashboard experience for weather, cryptocurrency, and sports information.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- Weather insights with current conditions and a 7-day forecast
+- Live cryptocurrency pricing and market movement trends
+- Sports highlights, upcoming events, and team standings
+- Responsive layout with a collapsible sidebar and light/dark theme toggle
+- Fast client-side experience powered by Vite and React
 
-## React Compiler
+## Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19
+- TypeScript
+- Vite
+- Tailwind CSS
+- Recharts
+- Lucide React
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+Before you begin, make sure you have the following installed:
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+- Node.js 18 or later
+- pnpm
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository
+2. Install dependencies:
 
+```bash
+pnpm install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Environment Configuration
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The app uses Vite environment variables for API base URLs. Create a local environment file by copying the example file:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
+```bash
+cp .env.example .env
 ```
+
+Then update the values in .env if you want to override the default public API endpoints:
+
+```env
+VITE_APP_CRYPTO_URL=https://api.coingecko.com/api/v3
+VITE_APP_SPORT_URL=https://site.web.api.espn.com/apis/v2/sports
+VITE_APP_WEATHER_URL=https://api.open-meteo.com/v1/forecast
+```
+
+## Running the App
+
+Start the development server:
+
+```bash
+pnpm dev
+```
+
+Open the local URL shown in the terminal to view the dashboard.
+
+## Building for Production
+
+Create a production build:
+
+```bash
+pnpm build
+```
+
+The output will be generated in the dist folder.
+
+## Project Structure
+
+- src/components - UI components and dashboard layout
+- src/components/panels - Weather, crypto, and sports panels
+- src/lib/api - API integration modules
+- src/types - Shared TypeScript types
+
+## License
+
+This project is open source and available under the MIT license.

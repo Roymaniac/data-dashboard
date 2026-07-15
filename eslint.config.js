@@ -18,5 +18,9 @@ export default defineConfig([
     languageOptions: {
       globals: globals.browser,
     },
+    rules: {
+      // shadcn primitives intentionally export component helpers alongside components.
+      'react-refresh/only-export-components': 'off',
+    },
   },
 ])
