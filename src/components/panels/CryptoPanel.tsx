@@ -9,7 +9,7 @@ import {
     XAxis,
     YAxis,
 } from "recharts"
-import { ArrowDown, ArrowUp, DollarSign, RefreshCw, TrendingDown, TrendingUp } from "lucide-react"
+import { ArrowDown, ArrowUp, RefreshCw, TrendingDown, TrendingUp } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { ChartContainer, ChartTooltip, ChartTooltipContent, type ChartConfig } from "@/components/ui/chart"
