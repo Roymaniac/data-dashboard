@@ -1,8 +1,8 @@
 import { lazy } from "react"
 import type { ComponentType, FC, LazyExoticComponent } from "react"
-import { Activity, Bitcoin, Cloud } from "lucide-react"
+import { Activity, Bitcoin, Cloud, LayoutDashboard } from "lucide-react"
 
-export type PanelSection = "weather" | "crypto" | "sports"
+export type PanelSection = "overview" | "weather" | "crypto" | "sports"
 
 export type PanelConfig = {
     id: PanelSection
@@ -15,8 +15,16 @@ export type PanelConfig = {
 const loadWeatherPanel = () => import("./WeatherPanel").then((module) => ({ default: module.WeatherPanel }))
 const loadCryptoPanel = () => import("./CryptoPanel").then((module) => ({ default: module.CryptoPanel }))
 const loadSportsPanel = () => import("./SportsPanel").then((module) => ({ default: module.SportsPanel }))
+const loadOverviewPanel = () => import("./OverviewPanel").then((module) => ({ default: module.OverviewPanel }))
 
 export const PANEL_CONFIGS: PanelConfig[] = [
+    {
+        id: "overview",
+        label: "Overview",
+        icon: LayoutDashboard,
+        subtitle: "Your live intelligence briefing",
+        component: lazy(loadOverviewPanel),
+    },
     {
         id: "weather",
         label: "Weather",

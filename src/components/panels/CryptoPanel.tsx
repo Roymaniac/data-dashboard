@@ -159,6 +159,11 @@ export function CryptoPanel() {
                                     }
                                 >
                                     <CardHeader className="pb-2">
+                                        <img
+                                            src={coin.image}
+                                            alt={coin.name}
+                                            className="h-5 w-5 rounded-full"
+                                        />
                                         <CardDescription className="flex items-center justify-between">
                                             <span className="font-medium uppercase">{coin.symbol}</span>
                                             <Badge variant={positive ? "default" : "destructive"} className="text-xs">
@@ -260,7 +265,12 @@ export function CryptoPanel() {
                                     <Card key={`stats-${coin.id}`}>
                                         <CardHeader className="pb-3">
                                             <CardDescription className="flex items-center gap-1.5">
-                                                <DollarSign className="h-4 w-4" />
+                                                {/* <DollarSign className="h-4 w-4" /> */}
+                                                <img
+                                                    src={coin.image}
+                                                    alt={coin.name}
+                                                    className="h-6 w-6"
+                                                />
                                                 {coin.name}
                                             </CardDescription>
                                             <CardTitle className="text-2xl tracking-tight">

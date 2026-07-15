@@ -77,7 +77,7 @@ function AppSidebar({ active, onSelect }: { active: Section; onSelect: (s: Secti
 }
 
 export function Dashboard() {
-  const [active, setActive] = useState<Section>("weather")
+  const [active, setActive] = useState<Section>("overview")
 
   const activePanel = PANEL_CONFIG_MAP[active]
 
@@ -115,13 +115,6 @@ export function Dashboard() {
               </Suspense>
             </div>
           </main>
-
-          {/* Footer */}
-          <footer className="border-t px-6 py-3">
-            <p className="text-xs text-muted-foreground">
-              Data sourced from Open-Meteo · CoinGecko · ESPN
-            </p>
-          </footer>
         </div>
       </div>
     </SidebarProvider>
