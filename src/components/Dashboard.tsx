@@ -17,8 +17,10 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar"
 import { Separator } from "@/components/ui/separator"
+import { Kbd } from "@/components/ui/kbd"
 import { Toggle } from "./Toggle"
 import { PANEL_CONFIGS, PANEL_CONFIG_MAP, type PanelSection } from "@/components/panels"
+import { CommandPalette, useCommandPalette } from "@/components/CommandPalette"
 
 type Section = PanelSection
 
@@ -78,6 +80,7 @@ function AppSidebar({ active, onSelect }: { active: Section; onSelect: (s: Secti
 
 export function Dashboard() {
   const [active, setActive] = useState<Section>("overview")
+  const { open, setOpen } = useCommandPalette()
 
   const activePanel = PANEL_CONFIG_MAP[active]
 
@@ -100,7 +103,16 @@ export function Dashboard() {
                   {activePanel.subtitle}
                 </p>
               </div>
-              <Toggle />
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setOpen(true)}
+                  className="hidden items-center gap-2 rounded-md border border-input bg-background px-3 py-1.5 text-xs text-muted-foreground transition-colors hover:bg-accent sm:flex"
+                >
+                  <span>Search...</span>
+                  <Kbd className="text-[10px]">⌘K</Kbd>
+                </button>
+                <Toggle />
+              </div>
             </div>
           </header>
 
@@ -117,6 +129,12 @@ export function Dashboard() {
           </main>
         </div>
       </div>
+      <CommandPalette
+        open={open}
+        onOpenChange={setOpen}
+        onNavigate={setActive}
+        onRefresh={() => { }}
+      />
     </SidebarProvider>
   )
 }

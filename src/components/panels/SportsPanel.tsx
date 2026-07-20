@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useMemo, useState } from "react"
 import { Calendar, RefreshCw, Trophy } from "lucide-react"
 
 import { Card, CardContent, CardDescription, CardHeader } from "@/components/ui/card"
@@ -17,6 +17,8 @@ import {
 import { useApiData } from "@/hooks/use-api-data"
 import { type SportLeague } from "@/types/api"
 import type { SportEvent } from "@/types/api"
+import { AutoRefreshControl, intervalToMs, type RefreshInterval } from "@/components/AutoRefreshButton"
+import { ExportButton } from "@/components/ExportButton"
 import { fetchSportData, SPORT_LABELS } from "@/lib/api/sport"
 
 function SportsSkeleton() {
@@ -123,9 +125,26 @@ function GameCard({ event }: { event: SportEvent }) {
 
 export function SportsPanel() {
     const [league, setLeague] = useState<SportLeague>("NBA")
+    const [refreshInterval, setRefreshInterval] = useState<RefreshInterval>("off")
     const { data, loading, error, refetch } = useApiData(
         (signal) => fetchSportData(league, signal),
         [league],
+        intervalToMs(refreshInterval)
+    )
+
+    const standings = useMemo(() => data?.standings ?? [], [data])
+
+    const exportData = useMemo(
+        () =>
+            standings.map((s) => ({
+                rank: s.rank,
+                team: s.teamName,
+                wins: s.wins,
+                losses: s.losses,
+                win_pct: s.winPercentage.toFixed(3),
+                streak: s.streak,
+            })),
+        [standings]
     )
 
     return (
@@ -151,6 +170,11 @@ export function SportsPanel() {
                         <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
                     </Button>
                 </div>
+            </div>
+
+            <div className="flex item-center gap-2">
+                <AutoRefreshControl interval={refreshInterval} onIntervalChange={setRefreshInterval} />
+                <ExportButton data={exportData} filename={`${league}-standing`} />
             </div>
 
             {error && (

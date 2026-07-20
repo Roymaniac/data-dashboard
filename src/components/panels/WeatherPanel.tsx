@@ -18,6 +18,8 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { useApiData } from "@/hooks/use-api-data"
 import { CITIES, fetchWeatherData, weatherCodeToDescription } from "@/lib/api/weather"
+import { ExportButton } from "@/components/ExportButton"
+import { AutoRefreshControl, intervalToMs, type RefreshInterval } from "@/components/AutoRefreshButton"
 import type { City } from "@/types/api"
 
 const chartConfig = {
@@ -63,9 +65,11 @@ function WeatherSkeleton() {
 
 export function WeatherPanel() {
     const [selectedCity, setSelectedCity] = useState<City>(CITIES[0])
+    const [refreshInterval, setRefreshInterval] = useState<RefreshInterval>("off")
     const { data, loading, error, refetch } = useApiData(
         (signal) => fetchWeatherData(selectedCity, signal),
         [selectedCity.latitude, selectedCity.longitude],
+        intervalToMs(refreshInterval),
     )
 
     const hourlyData = useMemo(
@@ -78,6 +82,20 @@ export function WeatherPanel() {
         [data],
     )
 
+    const weather = useMemo(() => data?.daily ?? [], [data])
+
+    const exportData = useMemo(
+        () =>
+            weather.map((w) => ({
+                date: w.date,
+                temp_max_c: w.tempMax,
+                temp_min_c: w.tempMin,
+                precipitation_pct: w.precipitationProbability,
+                weather: weatherCodeToDescription(w.weatherCode)
+            })),
+        [weather]
+    )
+
     return (
         <div className="space-y-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -88,6 +106,10 @@ export function WeatherPanel() {
                     </p>
                 </div>
                 <div className="flex items-center gap-2">
+                    <AutoRefreshControl interval={refreshInterval} onIntervalChange={setRefreshInterval} />
+                    <ExportButton data={exportData}
+                        filename={`weather-${selectedCity.name.toLocaleLowerCase().replace(/\s+/g, "-")}`}
+                    />
                     <Select
                         value={`${selectedCity.latitude},${selectedCity.longitude}`}
                         onValueChange={(val) => {

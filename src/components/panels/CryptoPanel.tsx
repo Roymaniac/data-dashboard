@@ -19,6 +19,8 @@ import { Button } from "@/components/ui/button"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { useApiData } from "@/hooks/use-api-data"
 import { COIN_LABELS, fetchCoinHistory, fetchCryptoData, type CoinId } from "@/lib/api/crypto"
+import { AutoRefreshControl, intervalToMs, type RefreshInterval } from "@/components/AutoRefreshButton"
+import { ExportButton } from "../ExportButton";
 
 const chartConfig = {
     price: { label: "Price (USD)", color: "var(--chart-1)" },
@@ -87,7 +89,8 @@ function Sparkline({ data, positive }: { data: number[]; positive: boolean }) {
 }
 
 export function CryptoPanel() {
-    const { data: coins, loading, error, refetch } = useApiData(fetchCryptoData, [])
+    const [refreshInterval, setRefreshInterval] = useState<RefreshInterval>("off")
+    const { data: coins, loading, error, refetch } = useApiData(fetchCryptoData, [], intervalToMs(refreshInterval))
     const [selectedCoin, setSelectedCoin] = useState<CoinId>("bitcoin")
     const [history, setHistory] = useState<Array<{ date: string; price: number }>>([])
     const [historyLoading, setHistoryLoading] = useState(false)
@@ -118,6 +121,19 @@ export function CryptoPanel() {
         [history],
     )
 
+    const exportData = useMemo(() => {
+        if (!coins) return []
+        return coins.map((c) => ({
+            name: c.name,
+            symbol: c.symbol,
+            price_usd: c.currentPrice,
+            change_24h_usd: c.priceChange24h,
+            change_24h_pct: c.priceChangePercentage24h,
+            market_cap_usd: c.marketCap,
+            volume_24h_usd: c.totalVolume,
+        }))
+    }, [coins])
+
     return (
         <div className="space-y-8">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -127,9 +143,13 @@ export function CryptoPanel() {
                         Live prices and 7-day trends via CoinGecko
                     </p>
                 </div>
-                <Button variant="outline" size="icon" onClick={refetch} disabled={loading}>
-                    <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
-                </Button>
+                <div className="flex flex-wrap items-center gap-2">
+                    <AutoRefreshControl interval={refreshInterval} onIntervalChange={setRefreshInterval} />
+                    {coins && <ExportButton data={exportData} filename="crypto-markets" />}
+                    <Button variant="outline" size="icon" onClick={refetch} disabled={loading}>
+                        <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+                    </Button>
+                </div>
             </div>
 
             {error && (
